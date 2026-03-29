@@ -436,8 +436,8 @@ footer { text-align: center; padding: 28px; font-size: 0.95rem; color: #f7f1e8; 
     .hero-buttons { flex-direction: column; width: 100%; }
     .btn-whatsapp, .btn-outline { width: 100%; justify-content: center; }
     .hero-mini { font-size: 0.85rem; letter-spacing: 0.12em; }
-    .script-title { font-size: 2.4rem; }
-    .hero-sub { font-size: 1.9rem; }
+    .script-title { font-size: 3.4rem; }
+    .hero-sub { font-size: 2.4rem; }
     .logo-mark img { width: 44px; height: 44px; }
     .logo-text .script { font-size: 1.35rem; }
     .logo-text small { letter-spacing: 0.1em; }
