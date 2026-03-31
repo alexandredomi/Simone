@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 diplomaTrack.scrollLeft += step;
             }
-            setTimeout(startLoop, 400);
+            setTimeout(startLoop, 300);
         };
 
         const scrollToPrev = () => {
@@ -103,26 +103,80 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 diplomaTrack.scrollLeft -= step;
             }
-            setTimeout(startLoop, 400);
+            setTimeout(startLoop, 300);
         };
 
         diplomaNext?.addEventListener('click', scrollToNext);
         diplomaPrev?.addEventListener('click', scrollToPrev);
 
-        // Rolagem contínua usando requestAnimationFrame
-        let rafId = null;
-        let speed = window.matchMedia('(max-width: 900px)').matches ? 1.6 : 2.4; // px/frame
-        const loop = () => {
-            diplomaTrack.scrollLeft += speed;
-            const limit = diplomaTrack.scrollWidth / 2;
-            if (diplomaTrack.scrollLeft >= limit) {
+        // Rolagem contínua usando requestAnimationFrame - sem travar
+
+        // Rolagem automática card a card (loop infinito)
+        let autoTimer = null;
+        let isAutoScrolling = true;
+
+        const playStep = () => {
+            const step = getStep();
+            if (diplomaTrack.scrollLeft + step >= maxHalf() - 4) {
                 diplomaTrack.scrollLeft = 0;
+            } else {
+                diplomaTrack.scrollLeft += step;
             }
-            rafId = requestAnimationFrame(loop);
         };
-        const startLoop = () => { if (!rafId) rafId = requestAnimationFrame(loop); };
-        const stopLoop = () => { if (rafId) { cancelAnimationFrame(rafId); rafId = null; } };
+
+        const startLoop = () => {
+            isAutoScrolling = true;
+            if (autoTimer) return;
+            autoTimer = setInterval(() => {
+                if (isAutoScrolling) playStep();
+            }, 1800); // ritmo constante de giro
+        };
+
+        const stopLoop = () => {
+            isAutoScrolling = false;
+            if (autoTimer) {
+                clearInterval(autoTimer);
+                autoTimer = null;
+            }
+        };
+
+        // pausa ao passar o mouse, volta a girar ao sair
+        diplomaTrack.addEventListener('mouseenter', stopLoop);
+        diplomaTrack.addEventListener('mouseleave', startLoop);
+
         startLoop();
+
+
+        // let rafId = null;
+        // let speed = 1.2; // px/frame - movimento contínuo suave
+        // let isAutoScrolling = true;
+        
+        // const loop = () => {
+        //     if (!isAutoScrolling) {
+        //         rafId = requestAnimationFrame(loop);
+        //         return;
+        //     }
+            
+        //     diplomaTrack.scrollLeft += speed;
+        //     const limit = diplomaTrack.scrollWidth / 2;
+            
+        //     // Reset suave quando chegar na metade (itens duplicados fazem o salto imperceptível)
+        //     if (diplomaTrack.scrollLeft >= limit - 2) {
+        //         diplomaTrack.scrollLeft = 0;
+        //     }
+            
+        //     rafId = requestAnimationFrame(loop);
+        // };
+        
+        // const startLoop = () => { 
+        //     isAutoScrolling = true;
+        //     if (!rafId) rafId = requestAnimationFrame(loop); 
+        // };
+        // const stopLoop = () => { 
+        //     isAutoScrolling = false;
+        // };
+        
+        // startLoop();
 
         // Modal de zoom
         const modal = document.querySelector('.diploma-modal');
@@ -135,14 +189,14 @@ document.addEventListener('DOMContentLoaded', function() {
             modalImg.alt = alt || 'Diploma';
             modal.classList.add('open');
             document.body.classList.add('modal-open');
-            stopLoop();
+            isAutoScrolling = false;
         };
 
         const closeModal = () => {
             if (!modal) return;
             modal.classList.remove('open');
             document.body.classList.remove('modal-open');
-            startLoop();
+            isAutoScrolling = true;
         };
 
         diplomaTrack.querySelectorAll('.diploma-card').forEach(card => {
@@ -165,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Reajusta velocidade ao mudar viewport
         window.addEventListener('resize', () => {
-            speed = window.matchMedia('(max-width: 900px)').matches ? 0.9 : 0.65;
+            // velocidade mantém-se constante para fluxo suave
         });
     }
 });
