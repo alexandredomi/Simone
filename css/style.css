@@ -14,6 +14,11 @@
     --shadow: 0 16px 32px rgba(20, 40, 40, 0.12);
 }
 
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 110px; /* compensa header e evita ancorar abaixo */
+}
+
 body {
     font-family: 'Quicksand', sans-serif;
     font-size: 17px;
@@ -22,7 +27,6 @@ body {
     linear-gradient(160deg, #fdf8f2 0%, #f5f8f8 50%, #fdf7ef 100%);
     color: var(--body);
     line-height: 1.65;
-    scroll-behavior: smooth;
     overflow-x: hidden;
 }
 
@@ -154,8 +158,34 @@ header {
 
 .hero-content p { font-size: clamp(1rem, 3vw, 1.2rem); color: #304040; margin: 12px 0 20px; max-width: 700px; }
 
-.hero-pills { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 22px; }
-.hero-pills span { background: rgba(31, 47, 47, 0.06); color: #1f2f2f; padding: 8px 12px; border-radius: 999px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(98, 212, 209, 0.2); }
+.hero-pills { display: flex; flex-wrap: wrap; gap: 18px; margin: 12px 0 26px; align-items: center; }
+.hero-pills span {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #0f2b2b;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    background: none;
+    box-shadow: none;
+    line-height: 1.2;
+}
+.hero-pills span i {
+    position: relative;
+    z-index: 1;
+    color: var(--turquoise-dark);
+    font-size: 1rem;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(98,212,209,0.45);
+    display: grid;
+    place-items: center;
+    background: rgba(98,212,209,0.08);
+}
 
 .hero-buttons { display: flex; flex-wrap: wrap; gap: 12px; }
 
@@ -275,6 +305,7 @@ section { padding: 64px 0; }
 }
 
 @media (max-width: 900px) {
+    html { scroll-padding-top: 84px; }
     .diploma-carousel {
         grid-template-columns: 1fr;
         padding: 0 4px;

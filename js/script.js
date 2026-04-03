@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinksContainer = document.querySelector('.nav-links');
 
     // Smooth scroll on page sections
+    const headerEl = document.querySelector('header');
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
@@ -15,7 +16,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetId = this.getAttribute('href').substring(1);
             const targetElement = document.getElementById(targetId);
             if (targetElement) {
-                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const headerOffset = headerEl
+                    ? headerEl.getBoundingClientRect().height + 12
+                    : (window.innerWidth < 900 ? 80 : 96); // compensa altura do menu no mobile/desktop
+                const elementTop = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                window.scrollTo({ top: elementTop - headerOffset, behavior: 'smooth' });
             }
         });
     });
